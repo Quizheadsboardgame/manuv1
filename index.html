@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MANCHESTER UNITED</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="Manchester United Logo">
+    <h1>MANCHESTER UNITED</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "When was Manchester United Football Club founded?", answer: "1878 (as Newton Heath LYR F.C.; renamed Manchester United in 1902)." },
+        { question: "What is the home stadium of Manchester United?", answer: "Old Trafford." },
+        { question: "What are the club colors of Manchester United?", answer: "Red, white, and black." },
+        { question: "Who is Manchester United's all-time top scorer?", answer: "Wayne Rooney." },
+        { question: "Which year did Manchester United win their first FA Cup?", answer: "1909." },
+        { question: "Who was the manager during Manchester United's treble-winning season in 1999?", answer: "Sir Alex Ferguson." },
+        { question: "How many times has Manchester United won the Premier League?", answer: "20 times (as of 2024)." },
+        { question: "Which player is known for the famous phrase 'I'm not a man to be messed with'?", answer: "Eric Cantona." },
+        { question: "What nickname is Manchester United commonly known by?", answer: "The Red Devils." },
+        { question: "In what year did Manchester United win their first UEFA Champions League title?", answer: "1968." },
+        { question: "Who scored the winning goal for Manchester United in the 1999 Champions League final?", answer: "Teddy Sheringham and Ole Gunnar Solskjær (both scored in injury time)." },
+        { question: "What is the capacity of Old Trafford?", answer: "Approximately 74,000." },
+        { question: "Who was the first player to captain Manchester United in a European Cup final?", answer: "Billy Meredith (1956)." },
+        { question: "Which player holds the record for the most appearances for Manchester United?", answer: "Ryan Giggs." },
+        { question: "What year did Manchester United last win the Premier League?", answer: "2013." },
+        { question: "Who did Manchester United beat to win their first-ever UEFA Cup Winners' Cup?", answer: "B. C. B. (Bayern Munich, 1991)." },
+        { question: "Who was Manchester United's manager before Ole Gunnar Solskjær?", answer: "José Mourinho." },
+        { question: "In which year did Manchester United relocate to Old Trafford?", answer: "1910." },
+        { question: "Which club did Manchester United sign Cristiano Ronaldo from in 2003?", answer: "Sporting CP." },
+        { question: "What is the name of Manchester United's youth academy?", answer: "Manchester United Academy." },
+        { question: "Who scored the famous goal in the 2008 Champions League final that helped secure the title?", answer: "Cristiano Ronaldo." },
+        { question: "Which Manchester United player was famously known as 'The King'?", answer: "Eric Cantona." },
+        { question: "Who was Manchester United's top scorer in the 2018-19 season?", answer: "Marcus Rashford." },
+        { question: "What is Manchester United's official mascot called?", answer: "Fred the Red." },
+        { question: "In what season did Manchester United win the FA Youth Cup for the first time?", answer: "1953-54." },
+        { question: "Which famous manager managed Manchester United from 1986 to 2013?", answer: "Sir Alex Ferguson." },
+        { question: "Which player famously scored the last-minute goal to secure the Premier League title in 2012-13?", answer: "Robin van Persie." },
+        { question: "What was the name of Manchester United's stadium before Old Trafford?", answer: "North Road." },
+        { question: "Which player did Manchester United sign from Juventus in 2016?", answer: "Paul Pogba." },
+        { question: "What year did Manchester United win the FIFA Club World Cup?", answer: "2008." },
+        { question: "Who was the first player to win the PFA Players' Player of the Year award at Manchester United?", answer: "Denis Law (1965)." },
+        { question: "Who did Manchester United defeat in the 1994 FA Cup final?", answer: "Chelsea." },
+        { question: "What is the name of Manchester United’s official supporters' group?", answer: "Manchester United Supporters' Trust." },
+        { question: "Which former Manchester United player was known for his trademark goal celebration involving the 'I Love You' gesture?", answer: "Eric Cantona." },
+        { question: "What was the score in the famous 1999 Champions League final?", answer: "2-1 to Manchester United against Bayern Munich." },
+        { question: "Who is the current manager of Manchester United (as of 2024)?", answer: "Erik ten Hag." },
+        { question: "Who was Manchester United's top scorer in the 1998-99 season?", answer: "Dwight Yorke." },
+        { question: "What year did Manchester United win their first League Cup?", answer: "1992." },
+        { question: "Which player scored the winning goal in the 1977 FA Cup final?", answer: "Jimmy Greenhoff." },
+        { question: "In what year did Manchester United's 'Busby Babes' die in the Munich air disaster?", answer: "1958." },
+        { question: "Who holds the record for the fastest goal scored in a Premier League match by a Manchester United player?", answer: "Ryan Giggs (in 1995, after 30 seconds)." },
+        { question: "What year did Manchester United complete their famous treble?", answer: "1999." },
+        { question: "Which team did Manchester United face in the first-ever FA Cup final?", answer: "Bristol City (in 1909)." },
+        { question: "What is the name of Manchester United's official training ground?", answer: "Carrington." },
+        { question: "Who did Manchester United beat to win the UEFA Super Cup in 1991?", answer: "Red Star Belgrade." },
+        { question: "Which Manchester United player was known for his 'Beckham' free kicks?", answer: "David Beckham." },
+        { question: "What is the famous chant sung by Manchester United fans?", answer: "'Glory Glory Man United.'" },
+        { question: "In which year did Manchester United win their first Premier League title under Sir Alex Ferguson?", answer: "1993." },
+        { question: "Who was Manchester United’s manager during the 1970s?", answer: "Tommy Docherty." },
+        { question: "Which player made the most appearances for Manchester United in the 2020-21 season?", answer: "Luke Shaw." },
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Shuffle the questions
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    shuffle(quizData);
+
+    // Load the current question and answer
+    function loadQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        const currentQuestion = quizData[currentQuestionIndex];
+
+        questionContainer.classList.add("fadeOut");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            questionContainer.innerText = currentQuestion.question;
+            answerContainer.innerText = currentQuestion.answer;
+
+            questionContainer.classList.remove("fadeOut");
+            questionContainer.classList.add("fadeIn");
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    // Move to the next question
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Quiz Completed!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+
+    // Initial load
+    loadQuestion();
+</script>
+
+</body>
+</html>
